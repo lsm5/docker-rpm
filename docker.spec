@@ -115,6 +115,7 @@ BuildRequires: btrfs-progs-devel
 BuildRequires: sqlite-devel
 BuildRequires: go-md2man >= 1.0.4
 BuildRequires: pkgconfig(systemd)
+BuildRequires: libseccomp-devel
 Requires: %{name}-common = %{version}-%{release}
 Requires(post): systemd
 Requires(preun): systemd
@@ -653,6 +654,7 @@ exit 0
 * Tue May 03 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-1
 - Resolves: #1335597 - rebase to v1.10.3 + rh patches
 - add subpackages for novolume-plugin, lvm-plugin, rhel-push-plugin, v1.10-migrator
+- BR: libseccomp-devel
 - built docker @projectatomic/rhel7-1.10.3 commit 86bbf84
 - built docker-selinux @origin/rhel7-1.10 commit 032bcda
 - built d-s-s commit df2af94
