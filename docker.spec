@@ -83,7 +83,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 1%{?dist}
+Release: 23%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -651,6 +651,9 @@ exit 0
 %{_bindir}/v1.10-migrator-local
 
 %changelog
+* Tue May 03 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-23
+- bump release tag to obsolete packages in docker-latest
+
 * Tue May 03 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-1
 - Resolves: #1335597 - rebase to v1.10.3 + rh patches
 - add subpackages for novolume-plugin, lvm-plugin, rhel-push-plugin, v1.10-migrator
