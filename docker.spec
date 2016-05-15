@@ -83,7 +83,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 24%{?dist}
+Release: 25%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -124,6 +124,7 @@ Requires(postun): systemd
 Requires: xz
 Requires: device-mapper-libs >= 7:1.02.97
 Requires: subscription-manager
+Requires: %{name}-rhel-push-plugin = %{version}-%{release}
 Provides: lxc-%{name} = %{version}-%{release}
 Provides: %{name}-io = %{version}-%{release}
 
@@ -651,6 +652,9 @@ exit 0
 %{_bindir}/v1.10-migrator-local
 
 %changelog
+* Sat May 14 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-25
+- docker requires docker-rhel-push-plugin
+
 * Sat May 14 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-24
 - docker unitfile updates to include rhel-push-plugin
 
