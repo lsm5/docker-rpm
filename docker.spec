@@ -83,7 +83,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 23%{?dist}
+Release: 24%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -651,6 +651,9 @@ exit 0
 %{_bindir}/v1.10-migrator-local
 
 %changelog
+* Sat May 14 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-24
+- docker unitfile updates to include rhel-push-plugin
+
 * Tue May 03 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-23
 - bump release tag to obsolete packages in docker-latest
 
