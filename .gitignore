@@ -239,3 +239,5 @@
 /docker-novolume-plugin-7715854.tar.gz
 /rhel-push-plugin-904c0ca.tar.gz
 /v1.10-migrator-c417a6a.tar.gz
+/oci-register-machine-7d4ce65.tar.gz
+/oci-systemd-hook-41491a3.tar.gz
