@@ -21,7 +21,7 @@
 
 # docker
 %global git0 https://github.com/projectatomic/docker
-%global commit0 86bbf842e425c6567c726912852976ccfa947e75
+%global commit0 47792252c76d4f10ae06795e91a982874ee02e8d
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 # docker-selinux
@@ -31,7 +31,7 @@
 
 # d-s-s
 %global git2 https://github.com/projectatomic/docker-storage-setup
-%global commit2 df2af9439577cedc2c502512d887c8df10a33cbf
+%global commit2 194eca25fd0d180b62f3ecf1b7b408992fd6a083
 %global shortcommit2 %(c=%{commit2}; echo ${c:0:7})
 %global dss_libdir %{_exec_prefix}/lib/%{name}-storage-setup
 
@@ -93,7 +93,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 26%{?dist}
+Release: 27%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -119,6 +119,7 @@ Source14: %{name}-common.sh
 Source15: README-%{name}-common
 Source16: %{git16}/archive/%{commit16}/oci-register-machine-%{shortcommit16}.tar.gz
 Source17: %{git17}/archive/%{commit17}/oci-systemd-hook-%{shortcommit17}.tar.gz
+Source18: v1.10-migrator-helper
 BuildRequires: glibc-static
 BuildRequires: golang >= 1.4.2
 BuildRequires: device-mapper-devel
@@ -573,6 +574,9 @@ install -p -m 644 %{repo}-lvm-plugin-%{commit6}%{_sysconfdir}/%{repo}/%{repo}-lv
 install -d %{buildroot}%{_bindir}
 install -p -m 700 v1.10-migrator-%{commit7}/v1.10-migrator-local %{buildroot}%{_bindir}
 
+# install v1.10-migrator-helper
+install -p -m 700 %{SOURCE18} %{buildroot}%{_bindir}
+
 # install oci-register-machine
 pushd oci-register-machine-%{commit16}
 install -d -p %{buildroot}%{_bindir}
@@ -713,7 +717,7 @@ exit 0
 %files v1.10-migrator
 %license v1.10-migrator-%{commit7}/LICENSE.{code,docs}
 %doc v1.10-migrator-%{commit7}/{CONTRIBUTING,README}.md
-%{_bindir}/v1.10-migrator-local
+%{_bindir}/v1.10-migrator-*
 
 %files -n oci-register-machine
 %license oci-register-machine-%{commit16}/LICENSE
@@ -733,6 +737,13 @@ exit 0
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Wed Jun 01 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-27
+- Resolves: #1341328 - include v1.10-migrator-helper script in the migrator
+subpackage
+- Resolves: #1335635 - solve log spam issues
+- built docker projectatomic/rhel7-1.10.3 commit 4779225
+- built dss commit 194eca2
+
 * Sat May 14 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-26
 - Resolves: #1341171 - add oci-register-machine and oci-systemd-hook subpackages
 - built oci-register-machine commit 7d4ce65
