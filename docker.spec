@@ -93,7 +93,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 30%{?dist}
+Release: 31%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -648,12 +648,12 @@ exit 0
 %{_sysconfdir}/%{name}/*
 %{_mandir}/man1/%{name}*.1.gz
 %{_mandir}/man5/*.5.gz
-%{_mandir}/man8/*.8.gz
+%{_mandir}/man8/%{name}-daemon.8.gz
 %{_bindir}/%{name}-*
 %dir %{_datadir}/rhel
 %{_datadir}/rhel/*
-%{_libexecdir}/%{name}
-%{_unitdir}/%{name}*
+%{_unitdir}/%{name}.service
+%{_unitdir}/%{name}-storage-setup.service
 %{_datadir}/bash-completion/completions/%{name}
 %dir %{_sharedstatedir}/%{name}
 %{_udevrulesdir}/80-%{name}.rules
@@ -738,6 +738,11 @@ exit 0
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Thu Jun 02 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-31
+- Resolves: #1342274 - update file listings to avoid file ownerships by
+multiple subpackages
+- update docker.sysconfig to include --log-driver=journald in OPTIONS
+
 * Thu Jun 02 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-30
 - Resolves: #1342149 - v1.10-migrator shipped separately in both docker and
 docker-latest
