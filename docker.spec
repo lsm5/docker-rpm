@@ -93,7 +93,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 27%{?dist}
+Release: 28%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -737,6 +737,9 @@ exit 0
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Wed Jun 01 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-28
+- Resolves: #1341789 - update unitfile to use systemd for cgroups
+
 * Wed Jun 01 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-27
 - Resolves: #1341328 - include v1.10-migrator-helper script in the migrator
 subpackage
