@@ -93,7 +93,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 29%{?dist}
+Release: 30%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -144,6 +144,9 @@ Provides: %{name}-io = %{version}-%{release}
 # RE: rhbz#1195804 - ensure min NVR for selinux-policy
 Requires: selinux-policy >= 3.13.1-23
 Requires(pre): %{name}-selinux >= %{version}-%{release}
+# rhbz#1300076
+Requires: %{name}-forward-journald = %{version}-%{release}
+Requires: %{name}-v1.10-migrator = %{version}-%{release}
 
 # rhbz#1214070 - update deps for d-s-s
 Requires: lvm2 >= 2.02.112
@@ -152,8 +155,6 @@ Requires: xfsprogs
 # rhbz#1282898 - obsolete docker-storage-setup
 Obsoletes: %{name}-storage-setup <= 0.0.4-2
 
-# rhbz#1300076
-Requires: %{name}-forward-journald = %{version}-%{release}
 
 %description
 Docker is an open-source engine that automates the deployment of any
@@ -267,8 +268,6 @@ then be bind mounted into the container using `docker run` command.
 License: ASL 2.0 and CC-BY-SA
 Summary: Calculates SHA256 checksums for docker layer content
 Requires: %{name} = %{version}-%{release}
-Obsoletes: %{name}-latest-v1.10-migrator <= 1.10.3-22
-Provides: %{name}-latest-v1.10-migrator = %{version}-%{release}
 
 %description v1.10-migrator
 Starting from v1.10 docker uses content addressable IDs for the images and
@@ -739,6 +738,13 @@ exit 0
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Thu Jun 02 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-30
+- Resolves: #1342149 - v1.10-migrator shipped separately in both docker and
+docker-latest
+- The v1.10-migrator subpackage in docker-latest has executables prepended 
+with 'docker-latest-', while there's no change in the ones shipped with 
+docker (RE: #1342149)
+
 * Thu Jun 02 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-29
 - Resolves: #1342149 - docker-v1.10-migrator obsoletes
 docker-latest-v1.10-migrator

@@ -25,7 +25,6 @@ ExecStart=/bin/sh -c '/usr/bin/docker-current daemon \
 LimitNOFILE=1048576
 LimitNPROC=1048576
 LimitCORE=infinity
-MountFlags=slave
 TimeoutStartSec=0
 Restart=on-abnormal
 StandardOutput=null
