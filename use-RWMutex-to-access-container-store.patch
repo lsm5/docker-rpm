@@ -1,0 +1,71 @@
+From b2c364814548620cf248a05dfb7dca079ecd72c0 Mon Sep 17 00:00:00 2001
+From: Antonio Murdaca <runcom@redhat.com>
+Date: Mon, 6 Jun 2016 18:17:05 +0200
+Subject: [PATCH] container: use RWMutex to access container store
+
+Signed-off-by: Antonio Murdaca <runcom@redhat.com>
+---
+ container/memory_store.go | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/container/memory_store.go b/container/memory_store.go
+index 153242f..a6bbf7e 100644
+--- a/container/memory_store.go
++++ b/container/memory_store.go
+@@ -5,7 +5,7 @@ import "sync"
+ // memoryStore implements a Store in memory.
+ type memoryStore struct {
+ 	s map[string]*Container
+-	sync.Mutex
++	sync.RWMutex
+ }
+ 
+ // NewMemoryStore initializes a new memory store.
+@@ -25,9 +25,9 @@ func (c *memoryStore) Add(id string, cont *Container) {
+ 
+ // Get returns a container from the store by id.
+ func (c *memoryStore) Get(id string) *Container {
+-	c.Lock()
++	c.RLock()
+ 	res := c.s[id]
+-	c.Unlock()
++	c.RUnlock()
+ 	return res
+ }
+ 
+@@ -42,26 +42,26 @@ func (c *memoryStore) Delete(id string) {
+ // The containers are ordered by creation date.
+ func (c *memoryStore) List() []*Container {
+ 	containers := new(History)
+-	c.Lock()
++	c.RLock()
+ 	for _, cont := range c.s {
+ 		containers.Add(cont)
+ 	}
+-	c.Unlock()
++	c.RUnlock()
+ 	containers.sort()
+ 	return *containers
+ }
+ 
+ // Size returns the number of containers in the store.
+ func (c *memoryStore) Size() int {
+-	c.Lock()
+-	defer c.Unlock()
++	c.RLock()
++	defer c.RUnlock()
+ 	return len(c.s)
+ }
+ 
+ // First returns the first container found in the store by a given filter.
+ func (c *memoryStore) First(filter StoreFilter) *Container {
+-	c.Lock()
+-	defer c.Unlock()
++	c.RLock()
++	defer c.RUnlock()
+ 	for _, cont := range c.s {
+ 		if filter(cont) {
+ 			return cont
+-- 
+2.7.4
+

@@ -93,7 +93,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 31%{?dist}
+Release: 32%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -120,6 +120,7 @@ Source15: README-%{name}-common
 Source16: %{git16}/archive/%{commit16}/oci-register-machine-%{shortcommit16}.tar.gz
 Source17: %{git17}/archive/%{commit17}/oci-systemd-hook-%{shortcommit17}.tar.gz
 Source18: v1.10-migrator-helper
+Patch0: use-RWMutex-to-access-container-store.patch
 BuildRequires: glibc-static
 BuildRequires: golang >= 1.4.2
 BuildRequires: device-mapper-devel
@@ -301,7 +302,7 @@ BuildRequires: go-md2man
 OCI systemd hooks enable running systemd in an OCI runc/docker container.
 
 %prep
-%setup -qn %{name}-%{commit0}
+%autosetup -Sgit -n %{name}-%{commit0}
 
 # unpack %%{name}-selinux
 tar zxf %{SOURCE1}
@@ -738,6 +739,9 @@ exit 0
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Mon Jun 06 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-32
+- Resolves: #1341906 - use RWMutex to acces container store
+
 * Thu Jun 02 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-31
 - Resolves: #1342274 - update file listings to avoid file ownerships by
 multiple subpackages
