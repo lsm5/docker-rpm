@@ -121,6 +121,7 @@ Source16: %{git16}/archive/%{commit16}/oci-register-machine-%{shortcommit16}.tar
 Source17: %{git17}/archive/%{commit17}/oci-systemd-hook-%{shortcommit17}.tar.gz
 Source18: v1.10-migrator-helper
 Patch0: use-RWMutex-to-access-container-store.patch
+BuildRequires: git
 BuildRequires: glibc-static
 BuildRequires: golang >= 1.4.2
 BuildRequires: device-mapper-devel
