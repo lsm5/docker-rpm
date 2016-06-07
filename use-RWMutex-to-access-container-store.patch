@@ -1,15 +1,15 @@
-From b2c364814548620cf248a05dfb7dca079ecd72c0 Mon Sep 17 00:00:00 2001
+From b93a5393cf5469fe012d760dcb83469b2c50303f Mon Sep 17 00:00:00 2001
 From: Antonio Murdaca <runcom@redhat.com>
 Date: Mon, 6 Jun 2016 18:17:05 +0200
-Subject: [PATCH] container: use RWMutex to access container store
+Subject: [PATCH] container: memory_store: fix deadlock
 
 Signed-off-by: Antonio Murdaca <runcom@redhat.com>
 ---
- container/memory_store.go | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ container/memory_store.go | 38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
 diff --git a/container/memory_store.go b/container/memory_store.go
-index 153242f..a6bbf7e 100644
+index 153242f..050d5d5 100644
 --- a/container/memory_store.go
 +++ b/container/memory_store.go
 @@ -5,7 +5,7 @@ import "sync"
@@ -33,19 +33,20 @@ index 153242f..a6bbf7e 100644
  	return res
  }
  
-@@ -42,26 +42,26 @@ func (c *memoryStore) Delete(id string) {
+@@ -41,28 +41,21 @@ func (c *memoryStore) Delete(id string) {
+ // List returns a sorted list of containers from the store.
  // The containers are ordered by creation date.
  func (c *memoryStore) List() []*Container {
- 	containers := new(History)
+-	containers := new(History)
 -	c.Lock()
-+	c.RLock()
- 	for _, cont := range c.s {
- 		containers.Add(cont)
- 	}
+-	for _, cont := range c.s {
+-		containers.Add(cont)
+-	}
 -	c.Unlock()
-+	c.RUnlock()
++	containers := History(c.all())
  	containers.sort()
- 	return *containers
+-	return *containers
++	return containers
  }
  
  // Size returns the number of containers in the store.
@@ -61,11 +62,39 @@ index 153242f..a6bbf7e 100644
  func (c *memoryStore) First(filter StoreFilter) *Container {
 -	c.Lock()
 -	defer c.Unlock()
-+	c.RLock()
-+	defer c.RUnlock()
- 	for _, cont := range c.s {
+-	for _, cont := range c.s {
++	for _, cont := range c.all() {
  		if filter(cont) {
  			return cont
+ 		}
+@@ -73,11 +66,8 @@ func (c *memoryStore) First(filter StoreFilter) *Container {
+ // ApplyAll calls the reducer function with every container in the store.
+ // This operation is asyncronous in the memory store.
+ func (c *memoryStore) ApplyAll(apply StoreReducer) {
+-	c.Lock()
+-	defer c.Unlock()
+-
+ 	wg := new(sync.WaitGroup)
+-	for _, cont := range c.s {
++	for _, cont := range c.all() {
+ 		wg.Add(1)
+ 		go func(container *Container) {
+ 			apply(container)
+@@ -88,4 +78,14 @@ func (c *memoryStore) ApplyAll(apply StoreReducer) {
+ 	wg.Wait()
+ }
+ 
++func (c *memoryStore) all() []*Container {
++	c.RLock()
++	containers := make([]*Container, 0, len(c.s))
++	for _, cont := range c.s {
++		containers = append(containers, cont)
++	}
++	c.RUnlock()
++	return containers
++}
++
+ var _ Store = &memoryStore{}
 -- 
 2.7.4
 

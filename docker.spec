@@ -93,7 +93,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 32%{?dist}
+Release: 33%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -740,6 +740,9 @@ exit 0
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Tue Jun 07 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-33
+- Patch0 used in previous build updated
+
 * Mon Jun 06 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-32
 - Resolves: #1341906 - use RWMutex to acces container store
 
