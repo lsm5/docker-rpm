@@ -95,7 +95,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 34%{?dist}
+Release: 35%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -741,6 +741,12 @@ exit 0
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Wed Jun 08 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-35
+- Resolves: #1338894, #1324150, #1343702, #1339146, #1304808, #1286787,
+#1323819, #1283891, #1339164, #1328917, #1317096,
+#1318690, #1309900, #1245325
+- same as previous build, bugs referenced
+
 * Tue Jun 07 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-34
 - Patch0 in previous build has been merged in projectatomic/docker rhel7-1.10.3 branch
 - built docker projectatomic/rhel7-1.10.3 commit 6baafd8
