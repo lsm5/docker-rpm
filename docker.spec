@@ -95,7 +95,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 36%{?dist}
+Release: 37%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -269,7 +269,6 @@ then be bind mounted into the container using `docker run` command.
 %package v1.10-migrator
 License: ASL 2.0 and CC-BY-SA
 Summary: Calculates SHA256 checksums for docker layer content
-Requires: %{name} = %{version}-%{release}
 
 %description v1.10-migrator
 Starting from v1.10 docker uses content addressable IDs for the images and
@@ -736,12 +735,16 @@ fi
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Wed Jun 08 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-37
+- migrator doesn't require docker at runtime either
+- From: Jonathan Lebon <jlebon@redhat.com>
+
 * Wed Jun 08 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-36
 - Do not run migrator script via %%triggerin
 - If the docker daemon is already running prior, the new daemon will be
 restarted which will handle migration
 - Remove migrator subpackage from docker runtime deps
-- From Jonathan Lebon <jlebon@redhat.com>
+- From: Jonathan Lebon <jlebon@redhat.com>
 
 * Wed Jun 08 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-35
 - Resolves: #1338894, #1324150, #1343702, #1339146, #1304808, #1286787,
