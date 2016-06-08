@@ -21,8 +21,10 @@
 
 # docker
 %global git0 https://github.com/projectatomic/docker
-%global commit0 47792252c76d4f10ae06795e91a982874ee02e8d
+%global commit0 6baafd816e666191171835a4ea18742596daff40
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
+# docker_branch used in %%check
+%global docker_branch rhel7-1.10.3
 
 # docker-selinux
 %global git1 https://github.com/projectatomic/docker-selinux
@@ -93,7 +95,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 33%{?dist}
+Release: 34%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -120,7 +122,6 @@ Source15: README-%{name}-common
 Source16: %{git16}/archive/%{commit16}/oci-register-machine-%{shortcommit16}.tar.gz
 Source17: %{git17}/archive/%{commit17}/oci-systemd-hook-%{shortcommit17}.tar.gz
 Source18: v1.10-migrator-helper
-Patch0: use-RWMutex-to-access-container-store.patch
 BuildRequires: git
 BuildRequires: glibc-static
 BuildRequires: golang >= 1.4.2
@@ -594,7 +595,7 @@ pushd oci-systemd-hook-%{commit17}
 [ ! -w /run/%{name}.sock ] || {
     mkdir test_dir
     pushd test_dir
-    git clone https://github.com/projectatomic/docker.git -b %{branch}
+    git clone https://github.com/projectatomic/docker.git -b %{docker_branch}
     pushd %{name}
     make test
     popd
@@ -740,6 +741,11 @@ exit 0
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Tue Jun 07 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-34
+- Patch0 in previous build has been merged in projectatomic/docker rhel7-1.10.3 branch
+- built docker projectatomic/rhel7-1.10.3 commit 6baafd8
+- define docker_branch macro to be used in %%check
+
 * Tue Jun 07 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-33
 - Patch0 used in previous build updated
 
