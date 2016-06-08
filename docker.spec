@@ -95,7 +95,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 35%{?dist}
+Release: 36%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -149,7 +149,6 @@ Requires: selinux-policy >= 3.13.1-23
 Requires(pre): %{name}-selinux >= %{version}-%{release}
 # rhbz#1300076
 Requires: %{name}-forward-journald = %{version}-%{release}
-Requires: %{name}-v1.10-migrator = %{version}-%{release}
 
 # rhbz#1214070 - update deps for d-s-s
 Requires: lvm2 >= 2.02.112
@@ -636,10 +635,6 @@ if %{_sbindir}/selinuxenabled ; then
 fi
 fi
 
-%triggerin -n %{name}-v1.10-migrator -- %{repo} < %{version}
-%{_bindir}/v1.10-migrator-local 2>/dev/null
-exit 0
-
 #define license tag if not already defined
 %{!?_licensedir:%global license %doc}
 
@@ -741,6 +736,13 @@ exit 0
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Wed Jun 08 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-36
+- Do not run migrator script via %%triggerin
+- If the docker daemon is already running prior, the new daemon will be
+restarted which will handle migration
+- Remove migrator subpackage from docker runtime deps
+- From Jonathan Lebon <jlebon@redhat.com>
+
 * Wed Jun 08 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-35
 - Resolves: #1338894, #1324150, #1343702, #1339146, #1304808, #1286787,
 #1323819, #1283891, #1339164, #1328917, #1317096,
