@@ -21,7 +21,7 @@
 
 # docker
 %global git0 https://github.com/projectatomic/docker
-%global commit0 6baafd816e666191171835a4ea18742596daff40
+%global commit0 a46c31af70ca8d15521e312ad9ef7085cfe2fd3f
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 # docker_branch used in %%check
 %global docker_branch rhel7-1.10.3
@@ -95,7 +95,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 37%{?dist}
+Release: 38%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -735,6 +735,10 @@ fi
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Thu Jun 09 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-38
+- built docker projectatomic/rhel7-1.10.3 commit a46c31a
+- fixes a panic
+
 * Wed Jun 08 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-37
 - migrator doesn't require docker at runtime either
 - From: Jonathan Lebon <jlebon@redhat.com>
