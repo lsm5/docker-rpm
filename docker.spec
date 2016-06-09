@@ -95,7 +95,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 38%{?dist}
+Release: 39%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -735,6 +735,9 @@ fi
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Thu Jun 09 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-39
+- bump release tag to make it consistent with docker-latest
+
 * Thu Jun 09 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-38
 - built docker projectatomic/rhel7-1.10.3 commit a46c31a
 - fixes a panic
