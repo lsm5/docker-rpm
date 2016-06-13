@@ -49,7 +49,7 @@
 
 # rhel-push-plugin
 %global git5 https://github.com/projectatomic/rhel-push-plugin
-%global commit5 904c0ca2a285e5e7c514c2eb90f5919bc59b6f86
+%global commit5 1a0046fc57606e329223748391d90284f2346565
 %global shortcommit5 %(c=%{commit5}; echo ${c:0:7})
 
 # docker-lvm-plugin
@@ -95,7 +95,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 41%{?dist}
+Release: 42%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -737,6 +737,10 @@ fi
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Mon Jun 13 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-42
+- Resolves: #1344448
+- built rhel-push-plugin commit 1a0046f
+
 * Mon Jun 13 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-41
 - Resolves: #1341171 - docker should require oci-register-machine and oci-systemd-hook
 - Resolves: #1342274 - docker doesn't own /etc/docker/docker-lvm-plugin

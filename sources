@@ -6,5 +6,5 @@ feefc81a3ced4cbf48218b75f2d48bf1  docker-storage-setup-194eca2.tar.gz
 364a0e680725ef42fe776d9496302e56  forward-journald-77e02a9.tar.gz
 513614ef1ef77ae848746d80b544b4a4  oci-register-machine-7d4ce65.tar.gz
 9db01179f3ad412a221e99698caf8f78  oci-systemd-hook-41491a3.tar.gz
-d087031e6bd1fb0385eef02e3667e7a2  rhel-push-plugin-904c0ca.tar.gz
+d8add3babc3929f22e819b37b206001a  rhel-push-plugin-1a0046f.tar.gz
 38ae69a77a63bca1c371ce877f458b3a  v1.10-migrator-c417a6a.tar.gz
