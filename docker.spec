@@ -95,7 +95,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 40%{?dist}
+Release: 41%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -141,6 +141,8 @@ Requires: xz
 Requires: device-mapper-libs >= 7:1.02.97
 Requires: subscription-manager
 Requires: %{name}-rhel-push-plugin = %{version}-%{release}
+Requires: oci-register-machine = %{version}-%{release}
+Requires: oci-systemd-hook = %{version}-%{release}
 Provides: lxc-%{name} = %{version}-%{release}
 Provides: %{name}-io = %{version}-%{release}
 
@@ -642,7 +644,7 @@ fi
 %doc AUTHORS CHANGELOG.md CONTRIBUTING.md MAINTAINERS NOTICE README*.md
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}-*
 %dir %{_sysconfdir}/%{name}
-%{_sysconfdir}/%{name}/*
+%{_sysconfdir}/%{name}/certs.d
 %{_mandir}/man1/%{name}*.1.gz
 %{_mandir}/man5/*.5.gz
 %{_mandir}/man8/%{name}-daemon.8.gz
@@ -735,6 +737,10 @@ fi
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Mon Jun 13 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-41
+- Resolves: #1341171 - docker should require oci-register-machine and oci-systemd-hook
+- Resolves: #1342274 - docker doesn't own /etc/docker/docker-lvm-plugin
+
 * Thu Jun 09 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-40
 - bump release tag to make it consistent with docker-latest
  
