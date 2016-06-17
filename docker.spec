@@ -95,7 +95,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 42%{?dist}
+Release: 43%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -737,6 +737,9 @@ fi
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Fri Jun 17 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-43
+- Resolves: #1347360 - add MountFlags=slave to unitfile
+
 * Mon Jun 13 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-42
 - Resolves: #1344448
 - built rhel-push-plugin commit 1a0046f
