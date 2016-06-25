@@ -95,7 +95,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 44%{?dist}
+Release: 45%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -124,7 +124,7 @@ Source17: %{git17}/archive/%{commit17}/oci-systemd-hook-%{shortcommit17}.tar.gz
 Source18: v1.10-migrator-helper
 BuildRequires: git
 BuildRequires: glibc-static
-BuildRequires: golang >= 1.4.2
+BuildRequires: %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang} >= 1.6.2
 BuildRequires: device-mapper-devel
 BuildRequires: pkgconfig(audit)
 BuildRequires: btrfs-progs-devel
@@ -737,6 +737,9 @@ fi
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Sat Jun 25 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-45
+- built with golang >= 1.6.2
+
 * Fri Jun 17 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-44
 - Resolves: #1311544 (bz added, no other change since -43)
 
