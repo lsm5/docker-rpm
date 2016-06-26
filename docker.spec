@@ -95,7 +95,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 45%{?dist}
+Release: 46%{?dist}.1
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -737,6 +737,9 @@ fi
 %dir %{_libexecdir}/oci/hooks.d
 
 %changelog
+* Sat Jun 25 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.1
+- add a minor release tag to differentiate between 7.2 and 7.3
+
 * Sat Jun 25 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-45
 - built with golang >= 1.6.2
 
