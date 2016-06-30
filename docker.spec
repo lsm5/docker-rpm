@@ -62,16 +62,6 @@
 %global commit7 c417a6a022c5023c111662e8280f885f6ac259be
 %global shortcommit7 %(c=%{commit7}; echo ${c:0:7})
 
-# oci-register-machine
-%global git16 https://github.com/projectatomic/oci-register-machine
-%global commit16 7d4ce654a2eaf282d16fd43f20130b3cf69b70c2
-%global shortcommit16 %(c=%{commit16}; echo ${c:0:7})
-
-# oci-systemd-hook
-%global git17 https://github.com/projectatomic/oci-systemd-hook
-%global commit17 41491a3c73193527487fb502026d41d3f0aad1aa
-%global shortcommit17 %(c=%{commit17}; echo ${c:0:7})
-
 # %%{name}-selinux stuff (prefix with ds_ for version/release etc.)
 # Some bits borrowed from the openstack-selinux package
 %global selinuxtype targeted
@@ -95,7 +85,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 46%{?dist}.1
+Release: 46%{?dist}.2
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -119,9 +109,7 @@ Source12: %{name}-logrotate.sh
 Source13: README.%{name}-logrotate
 Source14: %{name}-common.sh
 Source15: README-%{name}-common
-Source16: %{git16}/archive/%{commit16}/oci-register-machine-%{shortcommit16}.tar.gz
-Source17: %{git17}/archive/%{commit17}/oci-systemd-hook-%{shortcommit17}.tar.gz
-Source18: v1.10-migrator-helper
+Source16: v1.10-migrator-helper
 BuildRequires: git
 BuildRequires: glibc-static
 BuildRequires: %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang} >= 1.6.2
@@ -141,8 +129,8 @@ Requires: xz
 Requires: device-mapper-libs >= 7:1.02.97
 Requires: subscription-manager
 Requires: %{name}-rhel-push-plugin = %{version}-%{release}
-Requires: oci-register-machine = %{version}-%{release}
-Requires: oci-systemd-hook = %{version}-%{release}
+Requires: oci-register-machine = 1:0-1.4
+Requires: oci-systemd-hook = 1:0.1.4-4
 Provides: lxc-%{name} = %{version}-%{release}
 Provides: %{name}-io = %{version}-%{release}
 
@@ -283,26 +271,6 @@ The migration usually runs on daemon startup but it can be quite slow(usually
 that time. You can run this tool instead while the old daemon is still
 running and skip checksum calculation on startup.
 
-%package -n oci-register-machine
-License: ASL 2.0
-Summary: Golang binary to register OCI containers with systemd-machined
-
-%description -n oci-register-machine
-%{summary}
-
-%package -n oci-systemd-hook
-License: GPLv3+
-Summary: OCI systemd hook for docker
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: pkgconfig(yajl)
-BuildRequires: pkgconfig(libselinux)
-BuildRequires: pkgconfig(mount)
-BuildRequires: go-md2man
-
-%description -n oci-systemd-hook
-OCI systemd hooks enable running systemd in an OCI runc/docker container.
-
 %prep
 %autosetup -Sgit -n %{name}-%{commit0}
 
@@ -355,12 +323,6 @@ cp %{SOURCE14} .
 # common exec README
 cp %{SOURCE15} .
 
-# untar oci-register-machine
-tar zxf %{SOURCE16}
-
-# untar oci-systemd-hook
-tar zxf %{SOURCE17}
-
 %build
 mkdir _build
 
@@ -371,8 +333,6 @@ pushd _build
   ln -s $(dirs +1 -l)/%{repo}-novolume-plugin-%{commit4} src/%{provider}.%{provider_tld}/projectatomic/%{repo}-novolume-plugin
   ln -s $(dirs +1 -l)/rhel-push-plugin-%{commit5} src/%{provider}.%{provider_tld}/projectatomic/rhel-push-plugin
   ln -s $(dirs +1 -l)/%{repo}-lvm-plugin-%{commit6} src/%{provider}.%{provider_tld}/projectatomic/%{repo}-lvm-plugin
-  ln -s $(dirs +1 -l)/oci-register-machine-%{commit16} src/%{provider}.%{provider_tld}/projectatomic/oci-register-machine
-  ln -s $(dirs +1 -l)/oci-systemd-hook-%{commit17} src/%{provider}.%{provider_tld}/projectatomic/oci-systemd-hook
 popd
 
 export DOCKER_GITCOMMIT="%{shortcommit0}/%{version}"
@@ -412,20 +372,6 @@ pushd v1.10-migrator-%{commit7}
 export GOPATH=$GOPATH:$(pwd)/Godeps/_workspace
 sed -i 's/godep //g' Makefile
 make v1.10-migrator-local
-popd
-
-# build oci-register-machine
-pushd oci-register-machine-%{commit16}
-export GOPATH=$GOPATH:$(pwd)/Godeps/_workspace
-make %{?_smp_mflags}
-popd
-
-# build oci-systemd-hook
-pushd oci-systemd-hook-%{commit17}
-aclocal
-autoreconf -i
-%configure --libexecdir=%{_libexecdir}/oci/hooks.d/
-make %{?_smp_mflags}
 popd
 
 %install
@@ -579,17 +525,7 @@ install -d %{buildroot}%{_bindir}
 install -p -m 700 v1.10-migrator-%{commit7}/v1.10-migrator-local %{buildroot}%{_bindir}
 
 # install v1.10-migrator-helper
-install -p -m 700 %{SOURCE18} %{buildroot}%{_bindir}
-
-# install oci-register-machine
-pushd oci-register-machine-%{commit16}
-install -d -p %{buildroot}%{_bindir}
-make DESTDIR=%{buildroot} install
-popd
-
-# install oci-systemd-hook
-pushd oci-systemd-hook-%{commit17}
-%make_install
+install -p -m 700 %{SOURCE16} %{buildroot}%{_bindir}
 
 %check
 [ ! -w /run/%{name}.sock ] || {
@@ -719,24 +655,10 @@ fi
 %doc v1.10-migrator-%{commit7}/{CONTRIBUTING,README}.md
 %{_bindir}/v1.10-migrator-*
 
-%files -n oci-register-machine
-%license oci-register-machine-%{commit16}/LICENSE
-%doc oci-register-machine-%{commit16}/oci-register-machine.1.md
-%doc oci-register-machine-%{commit16}/README.md
-%dir %{_libexecdir}/oci
-%dir %{_libexecdir}/oci/hooks.d
-%{_libexecdir}/oci/hooks.d/oci-register-machine
-%{_mandir}/man1/oci-register-machine.1*
-
-%files -n oci-systemd-hook
-%license oci-systemd-hook-%{commit17}/LICENSE
-%doc oci-systemd-hook-%{commit17}/README.md
-%{_libexecdir}/oci/hooks.d/oci-systemd-hook
-%{_mandir}/man1/oci-systemd-hook.1*
-%dir %{_libexecdir}/oci
-%dir %{_libexecdir}/oci/hooks.d
-
 %changelog
+* Thu Jun 30 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.2
+- remove oci-* subpackages since they are independent packages now
+
 * Sat Jun 25 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.1
 - add a minor release tag to differentiate between 7.2 and 7.3
 
