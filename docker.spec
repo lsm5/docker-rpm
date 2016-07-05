@@ -85,7 +85,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 46%{?dist}.2
+Release: 46%{?dist}.3
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -129,8 +129,8 @@ Requires: xz
 Requires: device-mapper-libs >= 7:1.02.97
 Requires: subscription-manager
 Requires: %{name}-rhel-push-plugin = %{version}-%{release}
-Requires: oci-register-machine = 1:0-1.4
-Requires: oci-systemd-hook = 1:0.1.4-4
+Requires: oci-register-machine >= 1:0-1.4
+Requires: oci-systemd-hook >= 1:0.1.4-4
 Provides: lxc-%{name} = %{version}-%{release}
 Provides: %{name}-io = %{version}-%{release}
 
@@ -656,6 +656,9 @@ fi
 %{_bindir}/v1.10-migrator-*
 
 %changelog
+* Tue Jul 05 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.3
+- use '>=' for oci-* deps instead of '='
+
 * Thu Jun 30 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.2
 - remove oci-* subpackages since they are independent packages now
 
