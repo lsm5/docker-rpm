@@ -37,11 +37,6 @@
 %global shortcommit2 %(c=%{commit2}; echo ${c:0:7})
 %global dss_libdir %{_exec_prefix}/lib/%{name}-storage-setup
 
-# forward-journald
-%global git3 https://github.com/projectatomic/forward-journald
-%global commit3  77e02a9774a6ca054e41c27f6f319d701f1cbaea
-%global shortcommit3 %(c=%{commit3}; echo ${c:0:7})
-
 # docker-novolume-plugin
 %global git4 https://github.com/projectatomic/%{repo}-novolume-plugin
 %global commit4 7715854b5f3ccfdbf005c9e95d6e9afcaae9376a
@@ -96,7 +91,6 @@ ExclusiveArch: x86_64
 Source0: %{git0}/archive/%{commit0}.tar.gz
 Source1: %{git1}/archive/%{commit1}/%{name}-selinux-%{shortcommit1}.tar.gz
 Source2: %{git2}/archive/%{commit2}/%{name}-storage-setup-%{shortcommit2}.tar.gz
-Source3: %{git3}/archive/%{commit3}/forward-journald-%{shortcommit3}.tar.gz
 Source4: %{git4}/archive/%{commit4}/%{name}-novolume-plugin-%{shortcommit4}.tar.gz
 Source5: %{git5}/archive/%{commit5}/rhel-push-plugin-%{shortcommit5}.tar.gz
 Source6: %{git6}/archive/%{commit6}/%{name}-lvm-plugin-%{shortcommit6}.tar.gz
@@ -137,8 +131,6 @@ Provides: %{name}-io = %{version}-%{release}
 # RE: rhbz#1195804 - ensure min NVR for selinux-policy
 Requires: selinux-policy >= 3.13.1-23
 Requires(pre): %{name}-selinux >= %{version}-%{release}
-# rhbz#1300076
-Requires: %{name}-forward-journald = %{version}-%{release}
 
 # rhbz#1214070 - update deps for d-s-s
 Requires: lvm2 >= 2.02.112
@@ -188,18 +180,6 @@ Provides: %{name}-io-selinux = %{version}-%{release}
 
 %description selinux
 SELinux policy modules for use with Docker.
-
-%package forward-journald
-Summary: Forward stdin to journald
-License: ASL 2.0
-
-%description forward-journald
-Forward stdin to journald
-
-The main driver for this program is < go 1.6rc2 has a issue where 10
-SIGPIPE's on stdout or stderr cause go to generate a non-trappable SIGPIPE
-killing the process. This happens when journald is restarted while docker is
-running under systemd.
 
 %package common
 Summary: Common files for docker and docker-latest
@@ -280,9 +260,6 @@ tar zxf %{SOURCE1}
 # untar d-s-s
 tar zxf %{SOURCE2}
 
-# untar forward-journald
-tar zxf %{SOURCE3}
-
 # untar novolume-plugin
 tar zxf %{SOURCE4}
 
@@ -329,7 +306,6 @@ mkdir _build
 pushd _build
   mkdir -p src/%{provider}.%{provider_tld}/{%{name},projectatomic}
   ln -s $(dirs +1 -l) src/%{import_path}
-  ln -s $(dirs +1 -l)/forward-journald-%{commit3} src/%{provider}.%{provider_tld}/projectatomic/forward-journald
   ln -s $(dirs +1 -l)/%{repo}-novolume-plugin-%{commit4} src/%{provider}.%{provider_tld}/projectatomic/%{repo}-novolume-plugin
   ln -s $(dirs +1 -l)/rhel-push-plugin-%{commit5} src/%{provider}.%{provider_tld}/projectatomic/rhel-push-plugin
   ln -s $(dirs +1 -l)/%{repo}-lvm-plugin-%{commit6} src/%{provider}.%{provider_tld}/projectatomic/%{repo}-lvm-plugin
@@ -338,7 +314,7 @@ popd
 export DOCKER_GITCOMMIT="%{shortcommit0}/%{version}"
 export DOCKER_BUILDTAGS='selinux seccomp'
 export GOPATH=$(pwd)/_build:$(pwd)/vendor:%{gopath}
-export GOPATH=$GOPATH:$(pwd)/_build:$(pwd)/forward-journald-%{commit3}/vendor
+export GOPATH=$GOPATH:$(pwd)/_build
 export GOPATH=$GOPATH:$(pwd)/%{repo}-novolume-plugin-%{commit4}/Godeps/_workspace
 export GOPATH=$GOPATH:$(pwd)/rhel-push-plugin-%{commit5}/Godeps/_workspace
 export GOPATH=$GOPATH:$(pwd)/%{repo}-lvm-plugin-%{commit6}/vendor
@@ -361,7 +337,6 @@ make SHARE="%{_datadir}" TARGETS="%{modulenames}"
 popd
 
 pushd $(pwd)/_build/src
-go build -ldflags "-B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" %{provider}.%{provider_tld}/projectatomic/forward-journald
 go build -ldflags "-B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" %{provider}.%{provider_tld}/projectatomic/%{repo}-novolume-plugin
 go build -ldflags "-B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" %{provider}.%{provider_tld}/projectatomic/rhel-push-plugin
 go build -ldflags "-B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" %{provider}.%{provider_tld}/projectatomic/%{repo}-lvm-plugin
@@ -488,10 +463,6 @@ install -d %{buildroot}%{_mandir}/man1
 install -p -m 644 %{name}-storage-setup.1 %{buildroot}%{_mandir}/man1
 popd
 
-# install forward-journald
-install -d %{buildroot}%{_bindir}
-install -p -m 700 _build/src/forward-journald %{buildroot}%{_bindir}
-
 # install %%{_bindir}/%{name}
 install -d %{buildroot}%{_bindir}
 install -p -m 755 %{SOURCE14} %{buildroot}%{_bindir}/%{name}
@@ -617,11 +588,6 @@ fi
 %files selinux
 %doc %{name}-selinux-%{commit1}/README.md
 %{_datadir}/selinux/*
-
-%files forward-journald
-%license forward-journald-%{commit3}/LICENSE
-%doc forward-journald-%{commit3}/README.md
-%{_bindir}/forward-journald
 
 %files common
 %doc README-%{name}-common
