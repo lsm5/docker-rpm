@@ -21,7 +21,7 @@
 
 # docker
 %global git0 https://github.com/projectatomic/docker
-%global commit0 a46c31af70ca8d15521e312ad9ef7085cfe2fd3f
+%global commit0 acde00676fca0e2a78137b132648ccc33444e174
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 # docker_branch used in %%check
 %global docker_branch rhel7-1.10.3
@@ -33,7 +33,7 @@
 
 # d-s-s
 %global git2 https://github.com/projectatomic/docker-storage-setup
-%global commit2 194eca25fd0d180b62f3ecf1b7b408992fd6a083
+%global commit2 338cf6237b9613a4c674f8563473e0dc4d61c5fe
 %global shortcommit2 %(c=%{commit2}; echo ${c:0:7})
 %global dss_libdir %{_exec_prefix}/lib/%{name}-storage-setup
 
@@ -80,7 +80,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 46%{?dist}.3
+Release: 46%{?dist}.4
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -622,6 +622,10 @@ fi
 %{_bindir}/v1.10-migrator-*
 
 %changelog
+* Mon Jul 11 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.4
+- built docker projectatomic/rhel7-1.10.3 commit acde006
+- built d-s-s commit 338cf62
+
 * Tue Jul 05 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.3
 - use '>=' for oci-* deps instead of '='
 
