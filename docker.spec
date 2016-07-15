@@ -43,8 +43,8 @@
 %global shortcommit4 %(c=%{commit4}; echo ${c:0:7})
 
 # rhel-push-plugin
-%global git5 https://github.com/projectatomic/rhel-push-plugin
-%global commit5 1a0046fc57606e329223748391d90284f2346565
+%global git5 https://github.com/lsm5/rhel-push-plugin
+%global commit5 5b7c47b1fcc5e1442151a7fff0b924f1b38792df
 %global shortcommit5 %(c=%{commit5}; echo ${c:0:7})
 
 # docker-lvm-plugin
@@ -80,7 +80,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 46%{?dist}.6
+Release: 46%{?dist}.7
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -622,6 +622,10 @@ fi
 %{_bindir}/v1.10-migrator-*
 
 %changelog
+* Thu Jul 14 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.7
+- Re: #1352097 - start unitfile after rhel-push-plugin
+- built rhel-ppush-plugin lsm5/multi-docker commit 5b7c47b
+
 * Tue Jul 12 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.6
 - update oci-register-machine dep requirement
 

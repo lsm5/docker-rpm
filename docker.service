@@ -1,7 +1,7 @@
 [Unit]
 Description=Docker Application Container Engine
 Documentation=http://docs.docker.com
-After=network.target
+After=network.target rhel-push-plugin.socket
 Wants=docker-storage-setup.service
 Requires=rhel-push-plugin.socket
 
