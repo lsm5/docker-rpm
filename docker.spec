@@ -21,7 +21,7 @@
 
 # docker
 %global git0 https://github.com/projectatomic/docker
-%global commit0 acde00676fca0e2a78137b132648ccc33444e174
+%global commit0 f9d4a2c183cb4ba202babc9f8649ea043d8c84d0
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 # docker_branch used in %%check
 %global docker_branch rhel7-1.10.3
@@ -80,7 +80,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 46%{?dist}.7
+Release: 46%{?dist}.8
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -622,6 +622,10 @@ fi
 %{_bindir}/v1.10-migrator-*
 
 %changelog
+* Fri Jul 22 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.8
+- Resolves: #1359199, #1359200
+- built docker projectatomic/rhel7-1.10.3 commit f9d4a2c
+
 * Thu Jul 14 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.7
 - Re: #1352097 - start unitfile after rhel-push-plugin
 - built rhel-ppush-plugin lsm5/multi-docker commit 5b7c47b
