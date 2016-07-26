@@ -43,8 +43,8 @@
 %global shortcommit4 %(c=%{commit4}; echo ${c:0:7})
 
 # rhel-push-plugin
-%global git5 https://github.com/lsm5/rhel-push-plugin
-%global commit5 5b7c47b1fcc5e1442151a7fff0b924f1b38792df
+%global git5 https://github.com/projectatomic/rhel-push-plugin
+%global commit5 4eaaf336ed56171e82a08221e534136404a3f552
 %global shortcommit5 %(c=%{commit5}; echo ${c:0:7})
 
 # docker-lvm-plugin
@@ -80,7 +80,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 46%{?dist}.8
+Release: 46%{?dist}.9
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -138,7 +138,6 @@ Requires: xfsprogs
 
 # rhbz#1282898 - obsolete docker-storage-setup
 Obsoletes: %{name}-storage-setup <= 0.0.4-2
-
 
 %description
 Docker is an open-source engine that automates the deployment of any
@@ -622,6 +621,10 @@ fi
 %{_bindir}/v1.10-migrator-*
 
 %changelog
+* Tue Jul 26 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.9
+- Resolves: #1359496
+- built rhel-push-plugin commit 4eaaf33
+
 * Fri Jul 22 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.8
 - Resolves: #1359199, #1359200
 - built docker projectatomic/rhel7-1.10.3 commit f9d4a2c
