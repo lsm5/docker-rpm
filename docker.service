@@ -27,8 +27,6 @@ LimitCORE=infinity
 TimeoutStartSec=0
 MountFlags=slave
 Restart=on-abnormal
-StandardOutput=null
-StandardError=null
 
 [Install]
 WantedBy=multi-user.target

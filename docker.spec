@@ -80,7 +80,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 46%{?dist}.9
+Release: 46%{?dist}.10
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -621,6 +621,10 @@ fi
 %{_bindir}/v1.10-migrator-*
 
 %changelog
+* Tue Jul 26 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.10
+- Resolves: #1361673 - update unitfile to remove the need for
+forward-journald
+
 * Tue Jul 26 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.9
 - Resolves: #1359496
 - built rhel-push-plugin commit 4eaaf33
