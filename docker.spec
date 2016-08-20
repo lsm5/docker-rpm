@@ -21,7 +21,7 @@
 
 # docker
 %global git0 https://github.com/projectatomic/docker
-%global commit0 f9d4a2c183cb4ba202babc9f8649ea043d8c84d0
+%global commit0 ece5db980a3e26e31979011316f9edc004cccdea
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 # docker_branch used in %%check
 %global docker_branch rhel7-1.10.3
@@ -33,7 +33,7 @@
 
 # d-s-s
 %global git2 https://github.com/projectatomic/docker-storage-setup
-%global commit2 338cf6237b9613a4c674f8563473e0dc4d61c5fe
+%global commit2 c818aeb9a35688233c7d5f26c22b5e5bcd385268
 %global shortcommit2 %(c=%{commit2}; echo ${c:0:7})
 %global dss_libdir %{_exec_prefix}/lib/%{name}-storage-setup
 
@@ -80,7 +80,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 46%{?dist}.10
+Release: 46%{?dist}.11
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -252,6 +252,11 @@ running and skip checksum calculation on startup.
 
 %prep
 %autosetup -Sgit -n %{name}-%{commit0}
+
+# rhel debranding for centos
+%if 0%{?centos}
+sed -i 's/ADD_REGISTRY/#ADD_REGISTRY/' %{SOURCE9}
+%endif
 
 # unpack %%{name}-selinux
 tar zxf %{SOURCE1}
@@ -621,6 +626,12 @@ fi
 %{_bindir}/v1.10-migrator-*
 
 %changelog
+* Sat Aug 20 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.11
+- Resolves: #1368024 (partially)
+- built docker projectatomic/rhel7-1.10.3 commit ece5db9
+- built d-s-s commit c818aeb
+- RHEL debranding for CentOS - comment out ADD_REGISTRY in sysconfig
+
 * Tue Jul 26 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.10
 - Resolves: #1361673 - update unitfile to remove the need for
 forward-journald
