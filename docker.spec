@@ -630,6 +630,7 @@ fi
 
 * Sat Aug 20 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.11
 - Resolves: #1368024 (partially)
+- Resolves: #1358536
 - built docker projectatomic/rhel7-1.10.3 commit ece5db9
 - built d-s-s commit c818aeb
 - RHEL debranding for CentOS - comment out ADD_REGISTRY in sysconfig
