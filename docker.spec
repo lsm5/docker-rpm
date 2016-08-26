@@ -80,7 +80,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 46%{?dist}.12
+Release: 46%{?dist}.13
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -123,6 +123,7 @@ Requires: xz
 Requires: device-mapper-libs >= 7:1.02.97
 Requires: subscription-manager
 Requires: %{name}-rhel-push-plugin = %{version}-%{release}
+Requires: oci-register-machine >= 1:0-1.8
 Requires: oci-systemd-hook >= 1:0.1.4-4
 Provides: lxc-%{name} = %{version}-%{release}
 Provides: %{name}-io = %{version}-%{release}
@@ -625,6 +626,11 @@ fi
 %{_bindir}/v1.10-migrator-*
 
 %changelog
+* Fri Aug 26 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.13
+- Depend on oci-register-machine at runtime
+- oci-register-machine is disabled by default via
+/etc/oci-register-machine.conf
+
 * Tue Aug 23 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.12
 - Re: #1368267 - remove oci-register-machine runtime dep
 
