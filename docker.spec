@@ -21,7 +21,7 @@
 
 # docker
 %global git0 https://github.com/projectatomic/docker
-%global commit0 ece5db980a3e26e31979011316f9edc004cccdea
+%global commit0 58b38794e965c6f4df7b11883eb25f992ae2a627
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 # docker_branch used in %%check
 %global docker_branch rhel7-1.10.3
@@ -80,7 +80,7 @@
 
 Name: %{repo}
 Version: 1.10.3
-Release: 46%{?dist}.13
+Release: 46%{?dist}.14
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -626,6 +626,10 @@ fi
 %{_bindir}/v1.10-migrator-*
 
 %changelog
+* Mon Aug 29 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.14
+- Resolves: #1368999
+- built docker projectatomic/rhel7-1.10.3 commit 58b3879
+
 * Fri Aug 26 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.10.3-46.13
 - Depend on oci-register-machine at runtime
 - oci-register-machine is disabled by default via
