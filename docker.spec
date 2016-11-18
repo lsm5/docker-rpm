@@ -71,7 +71,7 @@ Source11: https://%{provider}.%{provider_tld}/vbatts/%{name}-utils/archive/%{uti
 Source12: https://%{provider}.%{provider_tld}/fedora-cloud/%{name}-selinux/archive/%{ds_commit}/%{name}-selinux-%{ds_shortcommit}.tar.gz
 # Source13 is the source tarball for %%{name}-storage-setup
 Source13: https://%{provider}.%{provider_tld}/projectatomic/%{name}-storage-setup/archive/%{dss_commit}/%{name}-storage-setup-%{dss_shortcommit}.tar.gz
-Patch0: race-condition-deferred-deletion.patch
+#Patch0: race-condition-deferred-deletion.patch
 BuildRequires: glibc-static
 BuildRequires: %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang >= 1.6.2}
 BuildRequires: device-mapper-devel
