@@ -50,7 +50,7 @@
 
 Name: %{repo}
 Version: %{d_version}
-Release: 10%{?dist}
+Release: 11%{?dist}
 Summary: Automates deployment of containerized applications
 License: ASL 2.0
 URL: https://%{import_path}
@@ -71,8 +71,9 @@ Source11: https://%{provider}.%{provider_tld}/vbatts/%{name}-utils/archive/%{uti
 Source12: https://%{provider}.%{provider_tld}/fedora-cloud/%{name}-selinux/archive/%{ds_commit}/%{name}-selinux-%{ds_shortcommit}.tar.gz
 # Source13 is the source tarball for %%{name}-storage-setup
 Source13: https://%{provider}.%{provider_tld}/projectatomic/%{name}-storage-setup/archive/%{dss_commit}/%{name}-storage-setup-%{dss_shortcommit}.tar.gz
+Patch0: race-condition-deferred-deletion.patch
 BuildRequires: glibc-static
-BuildRequires: golang == 1.4.2
+BuildRequires: %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang >= 1.6.2}
 BuildRequires: device-mapper-devel
 BuildRequires: pkgconfig(audit)
 BuildRequires: btrfs-progs-devel
@@ -143,7 +144,7 @@ Provides: %{name}-io-selinux
 SELinux policy modules for use with Docker.
 
 %prep
-%setup -qn %{name}-%{d_commit}
+%autosetup -Sgit -n %{name}-%{d_commit}
 cp %{SOURCE6} .
 
 # unpack %%{name}-selinux
@@ -404,6 +405,9 @@ fi
 %{_datadir}/selinux/*
 
 %changelog
+* Fri Nov 18 2016 Lokesh Mandvekar <lsm5@redhat.com> - 1.8.2-11
+- Fix race condition between device deferred removal and resume device
+
 * Wed Nov 11 2015 Lokesh Mandvekar <lsm5@fedoraproject.org> - 1.8.2-10
 - Resolves: rhbz#1281805, rhbz#1271229, rhbz#1276346
 - Resolves: rhbz#1275376, rhbz#1282898
