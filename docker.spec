@@ -294,7 +294,7 @@ ln -s %{_sysconfdir}/rhsm/ca/redhat-uep.pem %{buildroot}/%{_sysconfdir}/%{name}/
 install -dp %{buildroot}%{_sysconfdir}/%{name}/
 
 # install %%{name}-storage-setup
-pushd %{name}-storage-setup-%{dss_commit}
+pushd container-storage-setup-%{dss_commit}
 install -d %{buildroot}%{_bindir}
 install -p -m 755 %{name}-storage-setup.sh %{buildroot}%{_bindir}/%{name}-storage-setup
 install -d %{buildroot}%{_unitdir}
