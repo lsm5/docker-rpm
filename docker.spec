@@ -14,7 +14,7 @@
 %global import_path %{common_path}/%{repo}
 %global import_path_libcontainer %{common_path}/libcontainer
 
-%global d_commit a01dc02d9c369141f8bbbea0f51e8759dd6e5b93
+%global d_commit d6fb828a7f9ef86cfff21c8f439f621586288dd6
 %global d_shortcommit %(c=%{d_commit}; echo ${c:0:7})
 %global d_dist %(echo %{?dist} | sed 's/./-/')
 
@@ -58,7 +58,7 @@ URL: https://%{import_path}
 ExclusiveArch: x86_64
 # Branch used available at
 # https://%%{provider}.%%{provider_tld}/projectatomic/%%{name}/commits/rhel7-1.8
-Source0: https://%{provider}.%{provider_tld}/projectatomic/%{name}/archive/%{d_commit}.tar.gz
+Source0: https://%{provider}.%{provider_tld}/shishir-a412ed/%{name}-1.8/archive/%{d_commit}.tar.gz
 Source1: %{name}.service
 Source3: %{name}.sysconfig
 Source4: %{name}-storage.sysconfig
@@ -71,8 +71,6 @@ Source11: https://%{provider}.%{provider_tld}/vbatts/%{name}-utils/archive/%{uti
 Source12: https://%{provider}.%{provider_tld}/projectatomic/%{name}-selinux/archive/%{ds_commit}/%{name}-selinux-%{ds_shortcommit}.tar.gz
 # Source13 is the source tarball for %%{name}-storage-setup
 Source13: https://%{provider}.%{provider_tld}/projectatomic/%{name}-storage-setup/archive/%{dss_commit}/%{name}-storage-setup-%{dss_shortcommit}.tar.gz
-Patch0: 189.patch
-Patch1: 190.patch
 BuildRequires: glibc-static
 BuildRequires: %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang >= 1.6.2}
 BuildRequires: device-mapper-devel
@@ -145,7 +143,7 @@ Provides: %{name}-io-selinux
 SELinux policy modules for use with Docker.
 
 %prep
-%autosetup -Sgit -n %{name}-%{d_commit}
+%autosetup -Sgit -n %{name}-1.8-%{d_commit}
 cp %{SOURCE6} .
 
 # unpack %%{name}-selinux
@@ -178,7 +176,7 @@ cp contrib/syntax/vim/LICENSE LICENSE-vim-syntax
 cp contrib/syntax/vim/README.md README-vim-syntax.md
 
 # build %%{name}-selinux
-pushd %{name}-selinux-%{ds_commit}
+pushd container-selinux-%{ds_commit}
 make SHARE="%{_datadir}" TARGETS="%{modulenames}"
 popd
 
@@ -259,12 +257,12 @@ install -p -m 644 %{SOURCE7} %{buildroot}%{_sysconfdir}/sysconfig/%{name}-networ
 # install SELinux interfaces
 %_format INTERFACES $x.if
 install -d %{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
-install -p -m 644 %{name}-selinux-%{ds_commit}/$INTERFACES %{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
+install -p -m 644 container-selinux-%{ds_commit}/$INTERFACES %{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
 
 # install policy modules
 %_format MODULES $x.pp.bz2
 install -d %{buildroot}%{_datadir}/selinux/packages
-install -m 0644 %{name}-selinux-%{ds_commit}/$MODULES %{buildroot}%{_datadir}/selinux/packages
+install -m 0644 container-selinux-%{ds_commit}/$MODULES %{buildroot}%{_datadir}/selinux/packages
 
 %if 0%{?with_unit_test}
 install -d -m 0755 %{buildroot}%{_sharedstatedir}/%{name}-unit-test/
@@ -277,7 +275,7 @@ rm -rf %{buildroot}%{_sharedstatedir}/%{name}-unit-test/contrib/init/openrc/%{na
 %endif
 
 # remove %%{name}-selinux rpm spec file
-rm -rf %{name}-selinux-%{ds_commit}/%{name}-selinux.spec
+rm -rf container-selinux-%{ds_commit}/%{name}-selinux.spec
 
 # install secrets dir
 install -d -p -m 750 %{buildroot}/%{_datadir}/rhel/secrets
@@ -402,7 +400,7 @@ fi
 %{_sysconfdir}/cron.daily/%{name}-logrotate
 
 %files selinux
-%doc %{name}-selinux-%{ds_commit}/README.md
+%doc container-selinux-%{ds_commit}/README.md
 %{_datadir}/selinux/*
 
 %changelog
